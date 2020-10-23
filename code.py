@@ -148,11 +148,8 @@ last_update = time.monotonic()
 
 while True:
     # Set the red score text
+    try:
+        mqtt.is_connected()
+    except MQTT.MMQTTException:
+        mqtt.reconnect()
     mqtt.loop()
-    if time.monotonic() > last_update + UPDATE_DELAY:
-        update_scores()
-        last_update = time.monotonic()
-        try:
-            mqtt.is_connected()
-        except MQTT.MMQTTException:
-            mqtt.reconnect()
