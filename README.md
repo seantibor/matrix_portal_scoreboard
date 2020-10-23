@@ -1,5 +1,7 @@
 # MQTT Matrix Portal Scoreboard with CircuitPython
 
+![MatrixPortal](images/matrixportal.jpg)
+
 ## Description
 
 This project is a scoreboard that reads values over MQTT from a local broker. 
