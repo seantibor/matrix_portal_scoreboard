@@ -23,7 +23,7 @@ it reboots.
 
 ## Useful Guides
 
-- [MatrixPortal M4 Learning Guide](https://learn.adafruit.com/adafruit-matrixportal-m4/overview
+- [MatrixPortal M4 Learning Guide](https://learn.adafruit.com/adafruit-matrixportal-m4/overview)
 - [Adafruit MiniMQTT Library](https://circuitpython.readthedocs.io/projects/minimqtt/en/latest/)
 - [Matrix Portal Scoreboard](https://learn.adafruit.com/matrix-portal-scoreboard)
 
