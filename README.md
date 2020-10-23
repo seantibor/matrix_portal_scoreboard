@@ -1,4 +1,4 @@
-# Matrix Portal Scoreboard with CircuitPython
+# MQTT Matrix Portal Scoreboard with CircuitPython
 
 ## Description
 
