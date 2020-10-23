@@ -28,7 +28,7 @@ MQTT.set_socket(socket, network._wifi.esp)
 TEAM_1_COLOR = 0x00AA00
 TEAM_2_COLOR = 0xAAAAAA
 
-# Red Score
+# Team 1 Score
 matrixportal.add_text(
     text_font=terminalio.FONT,
     text_position=(4, int(matrixportal.graphics.display.height * 0.75) - 3),
@@ -36,7 +36,7 @@ matrixportal.add_text(
     text_scale=2,
 )
 
-# Blue Score
+# Team 2 Score
 matrixportal.add_text(
     text_font=terminalio.FONT,
     text_position=(36, int(matrixportal.graphics.display.height * 0.75) - 3),
@@ -44,14 +44,14 @@ matrixportal.add_text(
     text_scale=2,
 )
 
-# Red Team name
+# Team 1 name
 matrixportal.add_text(
     text_font=terminalio.FONT,
     text_position=(4, int(matrixportal.graphics.display.height * 0.25) - 4),
     text_color=TEAM_1_COLOR,
 )
 
-# Blue Team name
+# Team 2 name
 matrixportal.add_text(
     text_font=terminalio.FONT,
     text_position=(36, int(matrixportal.graphics.display.height * 0.25) - 4),
@@ -136,15 +136,15 @@ def update_scores():
     print("Updating data from Adafruit IO")
     show_connecting(True)
 
-    score_red = get_last_data(SCORES_1_FEED)
-    if score_red is None:
-        score_red = 0
-    matrixportal.set_text(score_red, 0)
+    score_1 = get_last_data(SCORES_1_FEED)
+    if score_1 is None:
+        score_1 = 0
+    matrixportal.set_text(score_1, 0)
 
-    score_blue = get_last_data(SCORES_2_FEED)
-    if score_blue is None:
-        score_blue = 0
-    matrixportal.set_text(score_blue, 1)
+    score_2 = get_last_data(SCORES_2_FEED)
+    if score_2 is None:
+        score_2 = 0
+    matrixportal.set_text(score_2, 1)
     show_connecting(False)
 
 
