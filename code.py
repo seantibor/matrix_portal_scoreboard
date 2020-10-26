@@ -64,12 +64,14 @@ matrixportal.add_text(
     text_position=(59, 0),
 )
 
-SCORES_1_FEED = "homeassistant/findeiss/1/dispenses/today"
-SCORES_2_FEED = "homeassistant/findeiss/1/dispenses/yesterday"
-TEAM_1_FEED = "homeassistant/findeiss/1/dispenses/today/label"
-TEAM_2_FEED = "homeassistant/findeiss/1/dispenses/yesterday/label"
-TEAM_1_COLOR_FEED = "homeassistant/findeiss/1/dispenses/today/color"
-TEAM_2_COLOR_FEED = "homeassistant/findeiss/1/dispenses/yesterday/color"
+feeds = {
+    "SCORES_1_FEED": "homeassistant/findeiss/1/dispenses/today",
+    "SCORES_2_FEED": "homeassistant/findeiss/1/dispenses/yesterday",
+    "TEAM_1_FEED": "homeassistant/findeiss/1/dispenses/today/label",
+    "TEAM_2_FEED": "homeassistant/findeiss/1/dispenses/yesterday/label",
+    "TEAM_1_COLOR_FEED": "homeassistant/findeiss/1/dispenses/today/color",
+    "TEAM_2_COLOR_FEED": "homeassistant/findeiss/1/dispenses/yesterday/color",
+}
 
 last_data = {}
 
@@ -94,7 +96,8 @@ def message_received(client, topic, message):
 
 
 def get_last_data(feed):
-    return last_data.get(feed)
+    feed_url = feeds.get(feed)
+    return last_data.get(feed_url)
 
 
 def customize_team_names():
@@ -105,24 +108,24 @@ def customize_team_names():
     global TEAM_2_COLOR
 
     show_connecting(True)
-    team_name = get_last_data(TEAM_1_FEED)
+    team_name = get_last_data("TEAM_1_FEED")
     if team_name is not None:
         print("Team {} is now Team {}".format(team_1, team_name))
         team_1 = team_name
     matrixportal.set_text(team_1, 2)
-    team_color = get_last_data(TEAM_1_COLOR_FEED)
+    team_color = get_last_data("TEAM_1_COLOR_FEED")
     if team_color is not None:
         team_color = int(team_color.replace("#", "").strip(), 16)
         print("Team {} is now Team {}".format(team_1, team_color))
         TEAM_1_COLOR = team_color
     matrixportal.set_text_color(TEAM_1_COLOR, 2)
     matrixportal.set_text_color(TEAM_1_COLOR, 0)
-    team_name = get_last_data(TEAM_2_FEED)
+    team_name = get_last_data("TEAM_2_FEED")
     if team_name is not None:
         print("Team {} is now Team {}".format(team_2, team_name))
         team_2 = team_name
     matrixportal.set_text(team_2, 3)
-    team_color = get_last_data(TEAM_2_COLOR_FEED)
+    team_color = get_last_data('TEAM_2_COLOR_FEED')
     if team_color is not None:
         team_color = int(team_color.replace("#", "").strip(), 16)
         print("Team {} is now Team {}".format(team_2, team_color))
@@ -136,12 +139,12 @@ def update_scores():
     print("Updating data from Adafruit IO")
     show_connecting(True)
 
-    score_1 = get_last_data(SCORES_1_FEED)
+    score_1 = get_last_data('SCORES_1_FEED')
     if score_1 is None:
         score_1 = 0
     matrixportal.set_text(score_1, 0)
 
-    score_2 = get_last_data(SCORES_2_FEED)
+    score_2 = get_last_data('SCORES_2_FEED')
     if score_2 is None:
         score_2 = 0
     matrixportal.set_text(score_2, 1)
@@ -154,13 +157,8 @@ def subscribe():
     except MQTT.MMQTTException:
         mqtt.connect()
     mqtt.on_message = message_received
-    mqtt.subscribe(SCORES_2_FEED)
-    mqtt.subscribe(SCORES_1_FEED)
-    mqtt.subscribe(TEAM_2_FEED)
-    mqtt.subscribe(TEAM_1_FEED)
-    mqtt.subscribe(TEAM_2_COLOR_FEED)
-    mqtt.subscribe(TEAM_1_COLOR_FEED)
-
+    for feed in feeds.values():
+        mqtt.subscribe(feed, 1)
 
 subscribe()
 customize_team_names()
