@@ -31,7 +31,7 @@ TEAM_2_COLOR = 0xAAAAAA
 # Team 1 Score
 matrixportal.add_text(
     text_font=terminalio.FONT,
-    text_position=(4, int(matrixportal.graphics.display.height * 0.75) - 3),
+    text_position=(2, int(matrixportal.graphics.display.height * 0.75) - 3),
     text_color=TEAM_1_COLOR,
     text_scale=2,
 )
@@ -39,7 +39,7 @@ matrixportal.add_text(
 # Team 2 Score
 matrixportal.add_text(
     text_font=terminalio.FONT,
-    text_position=(36, int(matrixportal.graphics.display.height * 0.75) - 3),
+    text_position=(40, int(matrixportal.graphics.display.height * 0.75) - 3),
     text_color=TEAM_2_COLOR,
     text_scale=2,
 )
@@ -47,14 +47,14 @@ matrixportal.add_text(
 # Team 1 name
 matrixportal.add_text(
     text_font=terminalio.FONT,
-    text_position=(4, int(matrixportal.graphics.display.height * 0.25) - 4),
+    text_position=(2, int(matrixportal.graphics.display.height * 0.25) - 4),
     text_color=TEAM_1_COLOR,
 )
 
 # Team 2 name
 matrixportal.add_text(
     text_font=terminalio.FONT,
-    text_position=(36, int(matrixportal.graphics.display.height * 0.25) - 4),
+    text_position=(40, int(matrixportal.graphics.display.height * 0.25) - 4),
     text_color=TEAM_2_COLOR,
 )
 
@@ -74,8 +74,6 @@ feeds = {
 }
 
 last_data = {}
-
-UPDATE_DELAY = 4
 
 matrixportal.set_text_color(TEAM_1_COLOR, 0)
 matrixportal.set_text_color(TEAM_2_COLOR, 1)
@@ -163,12 +161,12 @@ def subscribe():
 subscribe()
 customize_team_names()
 update_scores()
-last_update = time.monotonic()
 
 while True:
     # Set the red score text
     try:
         mqtt.is_connected()
-    except MQTT.MMQTTException:
+        mqtt.loop()
+    except (MQTT.MMQTTException, RuntimeError):
+        network.connect()
         mqtt.reconnect()
-    mqtt.loop()
